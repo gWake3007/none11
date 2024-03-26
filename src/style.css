@@ -1,0 +1,45 @@
+body {
+    margin: 0 auto;
+}
+
+.search-form {
+    padding: 20px 0 20px 0;
+    background-color: blue;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.photo-card {
+    border: 1px solid grey;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rga(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.photo-card img {
+    height: 214px;
+}
+
+.info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
