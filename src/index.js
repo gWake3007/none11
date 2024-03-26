@@ -19,7 +19,8 @@ let options = {
   rootMargin: '300px',
 };
 
-let page = 1;
+let isObserverActive = true;
+let page = 10;
 let observer = new IntersectionObserver(callback, options);
 const { searchQuery } = refs.form.elements;
 
@@ -101,8 +102,8 @@ function createMarkup(arr) {
     .join('');
 }
 
-function callback(entries) {
-  entries.forEach(entry => {
+async function callback(entries) {
+  await entries.forEach(entry => {
     if (entry.isIntersecting) {
       console.log(entry);
       page += 1;
@@ -119,9 +120,23 @@ function callback(entries) {
           if (data.data.totalHits / page <= 40) {
             //?Рівняння якщо всі сторінки вже завантаженні.
             observer.unobserve(refs.guard);
+            isObserverActive = false;
           }
+          //   if (observer.unobserve(refs.guard)) {
+          //     Notiflix.Notify.warning(
+          //       "We're sorry, but you've reached the end of search results."
+          //     );
+          //   }
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err))
+        .finally(() => {
+          if (!isObserverActive) {
+            Notiflix.Notify.warning(
+              "We're sorry, but you've reached the end of search results.",
+              { delay: 14000, },
+            );
+          }
+        });
     }
   });
 }
