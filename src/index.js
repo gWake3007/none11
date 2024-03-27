@@ -2,11 +2,12 @@ import axios from 'axios';
 const axios = require('axios').default;
 
 import Notiflix from 'notiflix';
+import simpleLightbox from 'simplelightbox';
 
-// import SimpleLightbox from 'simplelightbox';
-// import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
-// const lightbox = new SimpleLightbox('.gallery');
+const lightbox = new SimpleLightbox('.gallery');
 
 const refs = {
   form: document.querySelector('.search-form'),
@@ -20,11 +21,12 @@ let options = {
 };
 
 let isObserverActive = true;
-let page = 10;
+let page = 1;
 let observer = new IntersectionObserver(callback, options);
 const { searchQuery } = refs.form.elements;
 
 refs.form.addEventListener('submit', submitWord);
+refs.gallery.addEventListener('click', handleClick);
 
 function submitWord(event) {
   event.preventDefault();
@@ -78,7 +80,7 @@ function createMarkup(arr) {
         comments,
         downloads,
       }) => `<div class="photo-card">
-    <img src="${webformatURL}" alt="${tags}" loading="lazy" width="320px"/>
+    <a href="${largeImageURL}" class="large-img"><img src="${webformatURL}" alt="${tags}" loading="lazy" width="320px"/></a>
     <div class="info">
       <p class="info-item">
         <b>Likes</b>
@@ -122,21 +124,26 @@ async function callback(entries) {
             observer.unobserve(refs.guard);
             isObserverActive = false;
           }
-          //   if (observer.unobserve(refs.guard)) {
-          //     Notiflix.Notify.warning(
-          //       "We're sorry, but you've reached the end of search results."
-          //     );
-          //   }
         })
         .catch(err => console.log(err))
         .finally(() => {
           if (!isObserverActive) {
             Notiflix.Notify.warning(
-              "We're sorry, but you've reached the end of search results.",
-              { delay: 14000, },
+              "We're sorry, but you've reached the end of search results."
             );
           }
         });
     }
+  });
+}
+
+function handleClick(event) {
+  event.preventDefault();
+  const galleryA = new simpleLightbox('.gallery a', {
+    captions: true,
+    captionDelay: 250,
+    captionPosition: 'bottom',
+    captionsData: 'alt',
+    close: true,
   });
 }
