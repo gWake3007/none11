@@ -30,6 +30,13 @@ refs.gallery.addEventListener('click', handleClick);
 
 function submitWord(event) {
   event.preventDefault();
+  const querty = event.currentTarget.elements.searchQuery.value.trim();
+  //?Умова для того якщо користувач введе пробіл чи пробіли.
+    if (querty === '') {
+       return Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    }
   fetchUsers(searchQuery.value)
     .then(data => {
       console.log(data);
@@ -47,6 +54,15 @@ function submitWord(event) {
         Notiflix.Notify.info(
           `"Hooray! We found totalHits images: ${data.data.totalHits}"`
         );
+        //?Отримання висоти однієї картки.
+        const { height: cardHeight } = document
+          .querySelector('.gallery')
+          .firstElementChild.getBoundingClientRect();
+        //?Прокручування після знаходження на дві висоти карток.
+        window.scrollBy({
+          top: cardHeight * 2,
+          behavior: 'smooth',
+        });
       }
     })
     .catch(err => console.log(err));
@@ -146,4 +162,5 @@ function handleClick(event) {
     captionsData: 'alt',
     close: true,
   });
+  galleryA.refresh();
 }
